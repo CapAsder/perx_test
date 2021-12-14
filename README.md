@@ -34,7 +34,7 @@ curl --location --request POST 'http://localhost:5000/api/upload' \
 
 ## Получение информации по задаче
 ### Пример запроса:
-```json
+```commandline
 curl --location --request GET 'http://localhost:5000/api/job_status/a8984e85-44b1-47eb-a499-7b2aa0d1f5d6' \
 --header 'Authorization: Basic YWRtaW46KmY2MnAyQiJFUysqYXNBNQ=='
 ```
