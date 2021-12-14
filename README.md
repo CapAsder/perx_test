@@ -6,8 +6,8 @@
 ```
 
 ### Файлы-примеры 
-- resource1.xlsx
-- resource2.xls
+- ./data/resource1.xlsx
+- ./data/resource2.xls
 
 ### Настройки переменных окружения 
 ```commandline
