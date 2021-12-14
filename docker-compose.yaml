@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  api:
+    build: ./
+    container_name: flask_api
+    volumes:
+      - /home/upload/:/home/upload/
+    env_file: api.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+    restart: always
+
+  worker:
+    build: ./
+    container_name: flask_worker
+    volumes:
+      - /home/upload/:/home/upload/
+      - /home/app/logs/:/home/app/logs/
+    command: python3 worker.py
+    env_file: api.env
+    depends_on:
+      - redis
+    restart: always
+    cpu_quota: 10000
+    mem_limit: 1000M
+
+  redis:
+    image: redis
+    container_name: flask_redis
+    restart: always
