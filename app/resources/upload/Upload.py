@@ -1,5 +1,6 @@
 import time
-from pathlib import Path
+from redis import Redis
+import rq
 
 from flask import request
 from flask_restful import Resource
@@ -36,8 +37,6 @@ class Upload(Resource):
             try:
                 full_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(full_path)
-                from redis import Redis
-                import rq
                 queue = rq.Queue('upload_file_tasks',
                                  connection=Redis.from_url("redis://{0}:{1}".format(
                                      app.config['REDIS_HOST'], app.config['REDIS_PORT'])),

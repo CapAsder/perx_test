@@ -1,4 +1,6 @@
 import datetime
+from app import app
+import os
 import logging
 
 from rq import get_current_job
@@ -38,8 +40,6 @@ class ExcelParser:
 class XLSXParser(ExcelParser):
 
     def load(self):
-        from app import app
-        import os
         xlsx_file = Path(os.path.join(app.config['UPLOAD_FOLDER'], self._filename))
         if xlsx_file.is_file():
             self._obj = openpyxl.load_workbook(xlsx_file)
@@ -91,8 +91,6 @@ class XLSXParser(ExcelParser):
 class XLSParser(ExcelParser):
 
     def load(self):
-        from app import app
-        import os
         xlsx_file = Path(os.path.join(app.config['UPLOAD_FOLDER'], self._filename))
         if xlsx_file.is_file():
             self._obj = xlrd.open_workbook(xlsx_file)

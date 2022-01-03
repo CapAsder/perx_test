@@ -1,4 +1,5 @@
 from flask import request
+from app import USERNAME, PASSWORD, TOKEN
 
 
 def error(desc, **kwargs):
@@ -44,11 +45,9 @@ def is_auth():
         token = request.json['token']
 
     if username is not None and password is not None:
-        from app import USERNAME, PASSWORD
         if USERNAME == username and PASSWORD == password:
             return True
     if token is not None:
-        from app import TOKEN
         if TOKEN == token:
             return True
     return False
