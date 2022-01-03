@@ -11,6 +11,10 @@ import xlrd
 log = open("./logs/worker.log", "a")
 
 
+class TypeOfFileError(Exception):
+    pass
+
+
 class ExcelParser:
     _filename = None
     _obj = None
@@ -44,7 +48,7 @@ class XLSXParser(ExcelParser):
         if xlsx_file.is_file():
             self._obj = openpyxl.load_workbook(xlsx_file)
         else:
-            raise Exception("File not found")
+            raise FileNotFoundError("File not found")
 
     def count_worksheets(self):
         return len(self._obj.worksheets)
@@ -95,7 +99,7 @@ class XLSParser(ExcelParser):
         if xlsx_file.is_file():
             self._obj = xlrd.open_workbook(xlsx_file)
         else:
-            raise Exception("File not found")
+            raise FileNotFoundError("File not found")
 
     def count_worksheets(self):
         return self._obj.nsheets
@@ -130,7 +134,7 @@ def get_parser(filename):
     elif ext == 'xls':
         return XLSParser(filename)
     else:
-        raise Exception("Wrong type of file")
+        raise TypeOfFileError("Wrong type of file")
 
 
 def formated_print(text, job_id):

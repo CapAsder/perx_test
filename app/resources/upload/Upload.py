@@ -34,17 +34,13 @@ class Upload(Resource):
             m = hashlib.md5()
             m.update("md5{0}.{1}".format(time.time(), app.config['SECRET_KEY']).encode('utf-8'))
             filename = "{0}.{1}".format(m.hexdigest(), ext)
-            try:
-                full_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(full_path)
-                queue = rq.Queue('upload_file_tasks',
-                                 connection=Redis.from_url("redis://{0}:{1}".format(
-                                     app.config['REDIS_HOST'], app.config['REDIS_PORT'])),
-                                 default_timeout=600)
-                job = queue.enqueue('app.tasks.upload_file.start', filename)
-                return ok({'status': 'file uploaded', 'job_id': job.get_id()}), 200
-            except Exception as exc:
-                print(exc)
-                return error('Internal error'), 500
+            full_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(full_path)
+            queue = rq.Queue('upload_file_tasks',
+                             connection=Redis.from_url("redis://{0}:{1}".format(
+                                 app.config['REDIS_HOST'], app.config['REDIS_PORT'])),
+                             default_timeout=600)
+            job = queue.enqueue('app.tasks.upload_file.start', filename)
+            return ok({'status': 'file uploaded', 'job_id': job.get_id()}), 200
 
         return error('bad_request'), 403
