@@ -8,8 +8,6 @@ from pathlib import Path
 import openpyxl as openpyxl
 import xlrd
 
-log = open("./logs/worker.log", "a")
-
 
 class TypeOfFileError(Exception):
     pass
@@ -139,11 +137,17 @@ def get_parser(filename):
 
 def formated_print(text, job_id):
     string = "job_id = {0}. Text: {1}".format(job_id, text)
-    print(string)
-    log.writelines([string])
+    app.logger.info(string)
 
 
 def start(filename: str):
+    handler = logging.FileHandler("worker.log")
+    handler.setLevel(logging.DEBUG)
+    app.logger.addHandler(handler)
+    app.logger.setLevel(logging.DEBUG)
+    defaultFormatter = logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+    handler.setFormatter(defaultFormatter)
+
     job = get_current_job()
     job_id = job.get_id()
     formated_print("Start task... upload_file.py", job_id)

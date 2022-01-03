@@ -1,9 +1,17 @@
+import logging
 import os
 
 from flask import Flask, json, Blueprint
 from flask_restful import Api
 
 app = Flask(__name__)
+handler = logging.FileHandler("app.log")
+handler.setLevel(logging.DEBUG)
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.DEBUG)
+defaultFormatter = logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+handler.setFormatter(defaultFormatter)
+
 errors = Blueprint('errors', __name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'very-secret-key')
 USERNAME = os.environ.get('USERNAME', 'user')
